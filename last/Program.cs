@@ -8,9 +8,11 @@ namespace ExpressionSum
         {
             result = 0;
             if (n <= 0) return false;
+
             try
             {
                 double sum = 0;
+
                 for (int i = 1; i <= n; i++)
                 {
                     double term;
@@ -18,19 +20,20 @@ namespace ExpressionSum
                     {
                         double denominator = Math.Sin(i * x);
                         if (Math.Abs(denominator) < 1e-10) return false;
-                        term = ((n - i) * (x - i)) / denominator;
+
+                        term = ((n - i) * (x - (2 * i - 1))) / denominator;
                     }
                     else
                     {
                         double denominator = Math.Cos(i * x);
                         if (Math.Abs(denominator) < 1e-10) return false;
-                        term = ((n - i) * (x - i)) / denominator;
-                        term *= -1;
+
+                        term = -((n - i) * (x - (2 * i - 1))) / denominator; 
                     }
                     sum += term;
                 }
                 result = sum;
-                return true;
+                return true; 
             }
             catch
             {
@@ -47,7 +50,7 @@ namespace ExpressionSum
             try
             {
                 result = RecursiveTerm(n, x, 1);
-                return true;
+                return true; 
             }
             catch
             {
@@ -59,17 +62,20 @@ namespace ExpressionSum
             if (i > n) return 0;
             double denominator;
             double term;
+
             if (i % 2 == 1)
             {
                 denominator = Math.Sin(i * x);
                 if (Math.Abs(denominator) < 1e-10) throw new DivideByZeroException();
-                term = ((n - i) * (x - i)) / denominator;
+
+                term = ((n - i) * (x - (2 * i - 1))) / denominator;
             }
             else
             {
                 denominator = Math.Cos(i * x);
                 if (Math.Abs(denominator) < 1e-10) throw new DivideByZeroException();
-                term = -((n - i) * (x - i)) / denominator;
+
+                term = -((n - i) * (x - (2 * i - 1))) / denominator;
             }
             return term + RecursiveTerm(n, x, i + 1);
         }
@@ -87,15 +93,11 @@ namespace ExpressionSum
             ExpressionBase iter = new ExpressionBase();
             ExpressionBase rec = new ExpressionRecursive();
 
-            if (iter.Calculate(n, x, out double res1))
-                Console.WriteLine($"Ітераційний результат: {res1}");
-            else
-                Console.WriteLine("Помилка при обчисленні (ітераційний).");
+            if (iter.Calculate(n, x, out double res1)) Console.WriteLine($"Ітераційний результат: {res1}");
+            else Console.WriteLine("Помилка при обчисленні (ітераційний).");
 
-            if (rec.Calculate(n, x, out double res2))
-                Console.WriteLine($"Рекурсивний результат: {res2}");
-            else
-                Console.WriteLine("Помилка при обчисленні (рекурсивний).");
+            if (rec.Calculate(n, x, out double res2)) Console.WriteLine($"Рекурсивний результат: {res2}");
+            else Console.WriteLine("Помилка при обчисленні (рекурсивний).");
         }
     }
 }
